@@ -51,6 +51,16 @@ jobs:
           test -f .env.testing && echo ".env.testing exists"
           grep '^DATABASE_URL=' .env.testing | sed 's/=.*/=<configured>/'
       
+      - name: Generate Prisma Client
+        run: pnpm prisma generate
+
+      - name: Check Prisma migrations
+        run: |
+          set -a
+          source .env.testing
+          set +a
+          pnpm prisma migrate status
+
       - name: Run unit tests
         run: pnpm test:unit
 
