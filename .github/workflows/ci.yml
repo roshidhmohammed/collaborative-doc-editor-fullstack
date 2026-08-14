@@ -64,6 +64,7 @@ jobs:
       #     source .env.testing
       #     set +a
       #     pnpm prisma migrate status
+      
 
       - name: Run unit tests
         run: pnpm test:unit
