@@ -1,0 +1,121 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id       String  @id @default(uuid())
+  email    String  @unique
+  password String
+  fullName String?
+
+  // Documents created by the user
+  documents Document[]
+
+  // Documents shared with the user
+  collaborations DocumentCollaborator[]
+
+  // Version history
+  versions DocumentVersion[]
+
+  shareLinks DocumentShareLink[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
+enum Role {
+  OWNER
+  EDITOR
+  VIEWER
+}
+
+model Document {
+  id      String @id @default(cuid())
+  name    String
+  content Bytes? @default(dbgenerated("'\\x'::bytea"))
+
+  creatorId String
+  creator   User   @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+
+  creatorLink String?
+
+  collaborators DocumentCollaborator[]
+  versions      DocumentVersion[]
+  shareLinks    DocumentShareLink[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([creatorId])
+}
+
+model DocumentCollaborator {
+  id String @id @default(cuid())
+
+  documentId String
+  userId     String
+
+  role Role @default(EDITOR)
+
+  invitedBy String?
+
+  joinedAt DateTime @default(now())
+
+  document Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([documentId, userId])
+  @@index([documentId])
+  @@index([userId])
+}
+
+model DocumentVersion {
+  id String @id @default(cuid())
+
+  version Int
+
+  content Bytes? @default(dbgenerated("'\\x'::bytea"))
+
+  documentId  String
+  createdById String
+
+  document  Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  createdBy User     @relation(fields: [createdById], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([documentId, version])
+  @@index([documentId])
+  @@index([createdById])
+}
+
+model DocumentShareLink {
+  id String @id @default(cuid())
+
+  token String @unique
+
+  documentId String
+
+  role Role
+
+  createdById String
+
+  expiresAt DateTime?
+
+  isActive Boolean @default(true)
+
+  createdAt DateTime @default(now())
+
+  document Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  createdBy User @relation(fields: [createdById], references: [id], onDelete: Cascade)
+
+  @@index([token])
+  @@index([documentId])
+  @@index([createdById])
+}
