@@ -4,11 +4,11 @@ import SonnerProvider from "../providers/Toast";
 import { lusitana } from "@/lib/fonts";
 import QueryProvider from "@/providers/QueryProvider";
 
-const siteUrl = process.env.NEXT_PUBLIC_BASE_URL;
-
-if (!siteUrl) {
-  throw new Error("NEXT_PUBLIC_BASE_URL is not configured");
-}
+const siteUrl =
+  process.env.NEXT_PUBLIC_BASE_URL ||
+  (process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : "http://localhost:3000");
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
