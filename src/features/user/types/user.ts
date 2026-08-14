@@ -1,9 +1,9 @@
 export type UserDataType = {
   id: string;
-  fullName: string;
+  fullName: string | null;
   email: string;
 };
 
 export type ProfileModalProps = {
-  userData: UserDataType;
+  userData?: UserDataType | null | undefined;
 };

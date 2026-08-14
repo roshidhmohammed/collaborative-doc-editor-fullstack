@@ -10,9 +10,9 @@ export interface MockCookieOptions {
 }
 
 export interface MockCookieStore {
-  get: jest.Mock;
-  set: jest.Mock;
-  delete: jest.Mock;
+  get: jest.Mock<any>;
+  set: jest.Mock<any>;
+  delete: jest.Mock<any>;
 
   clear(): void;
 

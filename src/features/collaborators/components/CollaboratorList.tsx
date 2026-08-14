@@ -2,17 +2,19 @@
 
 import { Users, Crown } from "lucide-react";
 import { useDocumentEditorStore } from "@/store/document-editor";
+import { Session } from "../types/collaborators";
 
 const CollaboratorList = ({
   documentId,
   session,
 }: {
   documentId: string;
-  session: string | undefined;
+  session?: Session | { userId?: string } | string;
 }) => {
   const collaborators = useDocumentEditorStore((state) => state.collaborators);
 
-  console.log(collaborators)
+  const currentUserId =
+    typeof session === "object" && session !== null ? session.userId : session;
 
   return (
     <aside
@@ -43,7 +45,7 @@ const CollaboratorList = ({
               <div>
                 <div className="flex items-center gap-2">
                   <p className="font-medium text-white">
-                    {session?.userId === person.user.id
+                    {currentUserId === person.user.id
                       ? "You"
                       : person.user.fullName}
                   </p>
