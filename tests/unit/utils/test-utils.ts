@@ -1,6 +1,6 @@
-import { ReactElement, Suspense } from 'react';
+import React, { ReactElement, Suspense } from 'react';
 import { render, RenderResult } from '@testing-library/react';
 
 export function renderWithSuspense(ui: ReactElement): RenderResult {
-  return render(<Suspense fallback={null}>{ui}</Suspense>);
+  return render(React.createElement(Suspense, { fallback: null }, ui));
 }
