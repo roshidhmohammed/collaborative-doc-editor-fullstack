@@ -52,7 +52,11 @@ jobs:
           grep '^DATABASE_URL=' .env.testing | sed 's/=.*/=<configured>/'
       
       - name: Generate Prisma Client
-        run: pnpm prisma generate
+        run: |
+          set -a
+          source .env.testing
+          set +a
+          pnpm prisma generate
 
       - name: Check Prisma migrations
         run: |
