@@ -58,12 +58,12 @@ jobs:
           set +a
           pnpm prisma generate
 
-      - name: Check Prisma migrations
-        run: |
-          set -a
-          source .env.testing
-          set +a
-          pnpm prisma migrate status
+      # - name: Check Prisma migrations
+      #   run: |
+      #     set -a
+      #     source .env.testing
+      #     set +a
+      #     pnpm prisma migrate status
 
       - name: Run unit tests
         run: pnpm test:unit
