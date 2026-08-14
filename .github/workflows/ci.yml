@@ -46,6 +46,11 @@ jobs:
         run: |
           echo "${{ secrets.ENV_TESTING }}" > .env.testing
 
+      - name: Verify test environment
+        run: |
+          test -f .env.testing && echo ".env.testing exists"
+          grep '^DATABASE_URL=' .env.testing | sed 's/=.*/=<configured>/'
+      
       - name: Run unit tests
         run: pnpm test:unit
 
