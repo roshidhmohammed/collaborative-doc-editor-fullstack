@@ -9,7 +9,7 @@ function resolveSiteUrl(): string {
     return process.env.NEXT_PUBLIC_BASE_URL.trim();
   }
   if (process.env.VERCEL_URL?.trim()) {
-    return `https://${process.env.VERCEL_URL.trim()}`;
+    return `${process.env.VERCEL_URL.trim()}`;
   }
   return "http://localhost:3000";
 }
