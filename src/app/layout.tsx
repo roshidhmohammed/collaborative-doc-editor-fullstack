@@ -4,20 +4,41 @@ import SonnerProvider from "../providers/Toast";
 import { lusitana } from "@/lib/fonts";
 import QueryProvider from "@/providers/QueryProvider";
 
-function resolveSiteUrl(): string {
-  if (process.env.NEXT_PUBLIC_BASE_URL?.trim()) {
-    return process.env.NEXT_PUBLIC_BASE_URL.trim();
+/**
+ * Resolves the site's metadataBase URL for Next.js.
+ *
+ * Priority:
+ *   1. NEXT_PUBLIC_BASE_URL  (must be a fully-qualified URL, e.g. https://example.com)
+ *   2. VERCEL_URL            (injected by Vercel at runtime — prefixed with https://)
+ *   3. http://localhost:3000 (safe build-time fallback)
+ *
+ * Each candidate is tested with `new URL()` so a misconfigured env var
+ * (e.g. missing protocol) never crashes the build.
+ */
+function resolveMetadataBase(): URL {
+  const candidates: (string | undefined)[] = [
+    process.env.NEXT_PUBLIC_BASE_URL?.trim(),
+    process.env.VERCEL_URL?.trim()
+      ? `https://${process.env.VERCEL_URL.trim()}`
+      : undefined,
+    "http://localhost:3000",
+  ];
+
+  for (const candidate of candidates) {
+    if (!candidate) continue;
+    try {
+      return new URL(candidate);
+    } catch {
+      // invalid URL — try the next candidate
+    }
   }
-  if (process.env.VERCEL_URL?.trim()) {
-    return `${process.env.VERCEL_URL.trim()}`;
-  }
-  return "http://localhost:3000";
+
+  // Guaranteed-valid final fallback (never reached in practice)
+  return new URL("http://localhost:3000");
 }
 
-const siteUrl = resolveSiteUrl();
-
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
+  metadataBase: resolveMetadataBase(),
 
   title: {
     default: "Real-Time Collaborative Document Editor",
