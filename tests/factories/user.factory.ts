@@ -22,8 +22,11 @@ export async function createUser(
     overrides.fullName ??
     "Integration Test User";
 
+  const saltRounds =
+    process.env.NODE_ENV === "testing" ? 4 : 12;
+
   const hashedPassword =
-    await bcrypt.hash(password, 12);
+    await bcrypt.hash(password, saltRounds);
 
   const user = await prisma.user.create({
     data: {
