@@ -38,14 +38,12 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # Optional: run tests before production deployment
       # - name: Run unit tests
       #   run: pnpm test:unit
 
       # - name: Run integration tests
       #   run: pnpm test:integration
-
-      - name: Build application
-        run: pnpm build
 
       # - name: Install Playwright browsers
       #   run: pnpm exec playwright install --with-deps
@@ -53,34 +51,31 @@ jobs:
       # - name: Run E2E tests
       #   run: pnpm test:e2e
 
-      - name: Install Vercel CLI
-        run: pnpm add --global vercel
-
       - name: Pull Vercel production environment
         run: |
-          vercel pull \
+          pnpm dlx vercel pull \
             --yes \
             --environment=production \
-            --token=${{ secrets.VERCEL_TOKEN }}
+            --token="${{ secrets.VERCEL_TOKEN }}"
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
       - name: Build with Vercel
         run: |
-          vercel build \
+          pnpm dlx vercel build \
             --prod \
-            --token=${{ secrets.VERCEL_TOKEN }}
+            --token="${{ secrets.VERCEL_TOKEN }}"
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
       - name: Deploy to Vercel
         run: |
-          vercel deploy \
+          pnpm dlx vercel deploy \
             --prebuilt \
             --prod \
-            --token=${{ secrets.VERCEL_TOKEN }}
+            --token="${{ secrets.VERCEL_TOKEN }}"
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
