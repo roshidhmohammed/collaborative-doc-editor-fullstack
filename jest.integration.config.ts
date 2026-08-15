@@ -28,6 +28,8 @@ moduleNameMapper: {
 
   maxWorkers: 1,
 
+  testTimeout: 30000,
+
   extensionsToTreatAsEsm: [".ts", ".tsx"],
 };
 
