@@ -4,11 +4,17 @@ import SonnerProvider from "../providers/Toast";
 import { lusitana } from "@/lib/fonts";
 import QueryProvider from "@/providers/QueryProvider";
 
-const siteUrl =
-  process.env.NEXT_PUBLIC_BASE_URL ||
-  (process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : "http://localhost:3000");
+function resolveSiteUrl(): string {
+  if (process.env.NEXT_PUBLIC_BASE_URL?.trim()) {
+    return process.env.NEXT_PUBLIC_BASE_URL.trim();
+  }
+  if (process.env.VERCEL_URL?.trim()) {
+    return `https://${process.env.VERCEL_URL.trim()}`;
+  }
+  return "http://localhost:3000";
+}
+
+const siteUrl = resolveSiteUrl();
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
