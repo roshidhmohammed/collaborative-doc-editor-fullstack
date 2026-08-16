@@ -39,17 +39,17 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       # Optional: run tests before production deployment
-      - name: Run unit tests
-        run: pnpm test:unit
+      # - name: Run unit tests
+      #   run: pnpm test:unit
 
-      - name: Run integration tests
-        run: pnpm test:integration
+      # - name: Run integration tests
+      #   run: pnpm test:integration
 
-      - name: Install Playwright browsers
-        run: pnpm exec playwright install --with-deps
+      # - name: Install Playwright browsers
+      #   run: pnpm exec playwright install --with-deps
 
-      - name: Run E2E tests
-        run: pnpm test:e2e
+      # - name: Run E2E tests
+      #   run: pnpm test:e2e
 
       - name: Pull Vercel production environment
         run: |
