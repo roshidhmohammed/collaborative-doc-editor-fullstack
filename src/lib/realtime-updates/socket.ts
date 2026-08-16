@@ -4,6 +4,7 @@ let socket: Socket | null = null;
 let socketAuthToken: string | undefined;
 
 function socketUrl() {
+  console.log(process.env.NEXT_PUBLIC_SOCKET_URL)
   const url = process.env.NEXT_PUBLIC_SOCKET_URL;
   if (!url) {
     throw new Error("NEXT_PUBLIC_SOCKET_URL is not configured");
