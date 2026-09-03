@@ -12,6 +12,7 @@ export const metadata: Metadata = {
 };
 
 export default function LoginPage() {
+  console.log("deployed version 1.1")
   return (
     <>
       <header className="mb-8 text-white  text-center">
